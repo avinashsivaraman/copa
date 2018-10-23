@@ -52,15 +52,17 @@ def scrape_google(search_term, number_results, language_code):
 
 if __name__ == '__main__':
     keywords = ['edmund martin', 'python', 'google scraping']
+    keyword = '+'.join(keywords)
     data = []
     print(keywords)
-    for keyword in keywords:
-        try:
-            results = scrape_google(keyword, 100, "en")
-            for result in results:
-                data.append(result)
-        except Exception as e:
-            print(e)
-        finally:
-            time.sleep(10)
-    print(data)
+    try:
+        results = scrape_google(keyword, 100, "en")
+    except Exception as e:
+        print(e)
+    finally:
+        time.sleep(10)
+    links = []
+    for i in results:
+        links.append(i['link'])
+    print(len(links))
+    print(links)
