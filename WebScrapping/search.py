@@ -10,7 +10,6 @@ def fetch_results(search_term, number_results, language_code):
     assert isinstance(number_results, int), 'Number of results must be an integer'
     escaped_search_term = search_term.replace(' ', '+')
     google_url = 'https://www.google.com/search?q={}&num={}&hl={}'.format(escaped_search_term, number_results, language_code)
-    print(google_url)
     response = requests.get(google_url, headers=USER_AGENT)
     response.raise_for_status()
 
@@ -22,7 +21,6 @@ This function gets the results array and return the paragraph which contains the
 
 def parse_results(html, keyword):
     soup = BeautifulSoup(html, 'html.parser')
-
     found_results = []
     rank = 1
     result_block = soup.find_all('div', attrs={'class': 'g'})
@@ -53,17 +51,14 @@ def scrape_google(search_term, number_results, language_code):
         raise Exception("Appears to be an issue with your connection")
 
 
-if __name__ == '__main__':
-    keywords = ['edmund martin', 'python', 'google scraping']
+def searchWord(keywords):
     keyword = '+'.join(keywords)
     data = []
-    print(keywords)
     try:
         results = scrape_google(keyword, 100, "en")
     except Exception as e:
         print(e)
     finally:
         time.sleep(10)
-    print('Result is fetched')
-    result_sentences = [ i['description']for i in results ]
-    print(result_sentences)
+    return [i['description']for i in results]
+
