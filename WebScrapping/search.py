@@ -16,6 +16,9 @@ def fetch_results(search_term, number_results, language_code):
 
     return search_term, response.text
 
+"""
+This function gets the results array and return the paragraph which contains the keyword
+"""
 
 def parse_results(html, keyword):
     soup = BeautifulSoup(html, 'html.parser')
@@ -61,8 +64,6 @@ if __name__ == '__main__':
         print(e)
     finally:
         time.sleep(10)
-    links = []
-    for i in results:
-        links.append(i['link'])
-    print(len(links))
-    print(links)
+    print('Result is fetched')
+    result_sentences = [ i['description']for i in results ]
+    print(result_sentences)
