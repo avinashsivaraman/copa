@@ -8,11 +8,10 @@ Created on Tue Oct 23 18:30:49 2018
 from nltk.tag import StanfordPOSTagger
 import os
 import pandas as pd
-import csv
 import pickle
 
-path_to_jar = 'D:/NLP/Project/stanford-postagger-2018-10-16/stanford-postagger.jar'
-english_model = 'D:/NLP/Project/stanford-postagger-2018-10-16/models/english-left3words-distsim.tagger'
+path_to_jar = 'stanford-postagger-2018-10-16/stanford-postagger.jar'
+english_model = 'stanford-postagger-2018-10-16/models/english-left3words-distsim.tagger'
 java_path = "C:/Program Files/Java/jdk1.8.0_192/bin/java.exe"
 os.environ['JAVAHOME'] = java_path
 
