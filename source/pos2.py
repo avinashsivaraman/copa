@@ -19,46 +19,38 @@ os.environ['JAVAHOME'] = java_path
 tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
 xl = pd.read_excel('sentence.xlsx', header=None)
 
+removePOSTag = ['DT', 'IN', 'PRP$', 'CD', 'EX', 'LS', 'PRP']
+
 print('Running')
-#alternative1 = []
+query_1 = []
 for row in xl.iterrows():
     text = row[1][0]
     tagged_sent = tagger.tag(text.split())
-    df = pd.DataFrame(tagged_sent,columns=['token','Pos-Tag'])
-    df = df.set_index("Pos-Tag")
-    df = df.drop("DT", axis=0)
-    df = df.drop("IN", axis=0)
-    df = df.drop("PRP$", axis=0)
-    #df = df.drop("EX", axis=0)
-    #df = df.drop("LS", axis=0)
-    #df = df.drop("PRP", axis=0)
-    print(df)
-    break
-    #alternative1.append(df)
+    df = pd.DataFrame(tagged_sent,columns=['token','pt'])
 
-#pickle.dump( alternative1, open( "save.p", "wb" ) )
-print('Dumped the first pickle')
-#alternative2 = []
+    for i in removePOSTag:
+        df = df[df.pt != i]
+
+    print(list(df['token']))
+    a1_list = list(df['token'])
+    query_1.append(a1_list)
+    print()
+
+pickle.dump ( query_1, open( "save1.p", "wb"))
+query_2 = []
 for row in xl.iterrows():
     text = row[1][1]
     tagged_sent = tagger.tag(text.split())
-    df1 = pd.DataFrame(tagged_sent, columns=['token', 'Pos-Tag'])
-    df1 = df1.set_index("Pos-Tag")
-    df1 = df1.drop("DT", axis=0)
-    df1 = df1.drop("IN", axis=0)
-    df1 = df1.drop("PRP$", axis=0)
-    print(df1)
-    break
-    #alternative2.append(df1)
+    df1 = pd.DataFrame(tagged_sent, columns=['token', 'pt'])
 
-#pickle.dump ( alternative2, open( "save1.p", "wb") )
+    for i in removePOSTag:
+        df1 = df1[df1.pt != i]
 
-print('Dumped the second pickle')
-#with open('save.p', 'rb') as f:
-#    data = pickle.load(f)
-#    print(data)
+    print(list(df1['token']))
+    a2_list = list(df1['token'])
+    query_2.append(a2_list)
+    print()
 
-#with open('save1.p', 'rb') as f:
-#    data = pickle.load(f)
-#    print(data)
-#print('Dumped the first pickle')
+
+
+pickle.dump ( query_2, open( "save2.p", "wb"))
