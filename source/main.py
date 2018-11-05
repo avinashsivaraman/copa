@@ -8,28 +8,33 @@ with open('save1.p', 'rb') as f:
 
 with open('save2.p', 'rb') as f:
     data_2 = pickle.load(f)
+result = []
+#n = int(input('Enter the sentence : '))
+for i in range(1,1001):
+    alternative1 = data_1[i-1]
 
-n = int(input('Enter the sentence : '))
+    alternative2 = data_2[i-1]
+    print(alternative1, alternative2)
+    sentences1 = searchWord(alternative1)
+    sentences2 = searchWord(alternative2)
 
-alternative1 = data_1[n-1]
+    print(len(sentences1))
+    print('************************')
+    print(len(sentences2))
 
-alternative2 = data_2[n-1]
-print(alternative1, alternative2)
-sentences1 = searchWord(alternative1)
-sentences2 = searchWord(alternative2)
+    if(len(sentences1) > len(sentences2)):
+        a = 1
+        print('Plausible alternative is 1')
+    elif len(sentences1) < len(sentences2):
+        a = 2
+        print('Plausible alternative is 2')
+    else:
+        a = 3
+        print('Equal')
 
-print(len(sentences1))
-print('************************')
-print(len(sentences2))
+    result.append(a)
 
-if(len(sentences1) > len(sentences2)):
-    print('Plausible alternative is 1')
-elif len(sentences1) < len(sentences2):
-    print('Plausible alternative is 2')
-else:
-    print('Equal')
-
-
+pickle.dump (result, open("save3.p","wb"))
 # for i in sentences:
 #     print(i, end='\n\n')
 
