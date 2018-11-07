@@ -8,37 +8,62 @@ with open('save1.p', 'rb') as f:
 
 with open('save2.p', 'rb') as f:
     data_2 = pickle.load(f)
+
+
+try:
+    with open('memo-sentence.p', 'rb') as f:
+        memo = pickle.load(f)
+except FileNotFoundError:
+    memo = {}
+
 result = []
-#n = int(input('Enter the sentence : '))
-for i in range(1,1001):
-    alternative1 = data_1[i-1]
 
-    alternative2 = data_2[i-1]
-    print(alternative1, alternative2)
-    sentences1 = searchWord(alternative1)
-    sentences2 = searchWord(alternative2)
+try:
+    for i in range(1001):
 
-    print(len(sentences1))
-    print('************************')
-    print(len(sentences2))
+        alternative1 = data_1[i]
+        alternative2 = data_2[i]
+        # print(alternative1, alternative2)
 
-    if(len(sentences1) > len(sentences2)):
-        a = 1
-        print('Plausible alternative is 1')
-    elif len(sentences1) < len(sentences2):
-        a = 2
-        print('Plausible alternative is 2')
-    else:
-        a = 3
-        print('Equal')
+        if i not in memo:
+            sentences1 = searchWord(alternative1)
+            sentences2 = searchWord(alternative2)
+            memo[i] = {
+                'sentences1': sentences1,
+                'sentences2': sentences2
+            }
 
-    result.append(a)
+        else:
+            sentences1 = memo[i]['sentences1']
+            sentences2 = memo[i]['sentences2']
 
-pickle.dump (result, open("save3.p","wb"))
+        print(len(sentences1))
+        print('************************')
+        print(len(sentences2))
+
+
+
+        if(len(sentences1) > len(sentences2)):
+            a = 1
+            print('Plausible alternative is 1')
+        elif len(sentences1) < len(sentences2):
+            a = 2
+            print('Plausible alternative is 2')
+        else:
+            a = 3
+            print('Equal')
+        print('Memo successfull')
+        result.append(a)
+    pickle.dump ( a, open("save3.p", "wb"))
+    pickle.dump(memo, open('memo-sentence.p', "wb"))
+except Exception:
+    print(Exception)
+    pickle.dump(a, open("save3.p", "wb"))
+    pickle.dump(memo, open('memo-sentence.p', "wb"))
+except KeyboardInterrupt:
+    pickle.dump(a, open("save3.p", "wb"))
+    pickle.dump(memo, open('memo-sentence.p', "wb"))
 # for i in sentences:
 #     print(i, end='\n\n')
-
-
-
 
 
