@@ -1,28 +1,43 @@
-"""Simple command-line example for Custom Search.
-Command-line application that does a search.
-"""
-
-__author__ = 'jcgregorio@google.com (Joe Gregorio)'
-
-import pprint
-
-from apiclient.discovery import build
+import json
+import time
+import requests
 
 
-def main(apiKey, q):
-  # Build a service object for interacting with the API. Visit
-  # the Google APIs Console <http://code.google.com/apis/console>
-  # to get an API key for your own application.
+def BingSearch(searchTerm1, searchTerm2):
+    subscriptionKey = "xxxxxxxxxxAPI KEY xxxxxxxx"
 
-  service = build("customsearch", "v1",
-            developerKey=apiKey)
+    customConfigId = "bcdd3b33-18f9-4487-b313-c526b76484a1"
+    i = 0
+    request1 = []
+    request2 = []
+    while True:
+        url = 'https://api.cognitive.microsoft.com/bingcustomsearch/v7.0/search?q=' + searchTerm1 + '&customConfig=' + customConfigId + '&count=50&offset=' + str(i)
+        time.sleep(2)
+        r1 = requests.get(url, headers={'Ocp-Apim-Subscription-Key': subscriptionKey})
+        time.sleep(2)
+        url = 'https://api.cognitive.microsoft.com/bingcustomsearch/v7.0/search?q=' + searchTerm2 + '&customConfig=' + customConfigId + '&count=50&offset=' + str(i)
+        time.sleep(2)
+        r2 = requests.get(url, headers={'Ocp-Apim-Subscription-Key': subscriptionKey})
+        r1Parse = json.loads(r1.text)["webPages"]["value"]
+        r2Parse = json.loads(r2.text)["webPages"]["value"]
+        request1.extend(list(map(lambda x: x["snippet"], r1Parse)))
+        request2.extend(list(map(lambda x: x["snippet"], r2Parse)))
+        if len(r1Parse) < 50 or len(r2Parse) < 50:
+            break
+        if i == 200:
+            break
+        i = i + 50
+    return request1, request2
 
-  res = service.cse().list(
-      q=q,
-      cx='015267152292348546700:l1jzt9ewozi',
+'''
+    value = ["descipt":  1, "snippet": "asdkdjsljdlkafjl]
+'''
 
-    ).execute()
-  pprint.pprint(res)
 
-if __name__ == '__main__':
-  main('AIzaSyAOcDshR94ts5dab94LT3BlrKlE82nYIlI', 'avinash+sivaraman')
+def searchBing(search1, search2):
+    return BingSearch('+'.join(search1), '+'.join(search2))
+
+if __name__ == "__main__":
+    one, two = searchBing(["hello", "I", "am", "old"],["hello", "I", "am", "young"])
+    print(len(one), len(two))
+    print(one, two)
