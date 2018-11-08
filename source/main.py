@@ -10,6 +10,15 @@ with open('save1.p', 'rb') as f:
 with open('save2.p', 'rb') as f:
     data_2 = pickle.load(f)
 
+xl = pd.read_excel('sentence.xlsx', header=None)
+
+p_alternative = []
+for row in xl.iterrows():
+    number = row[1][2]
+    p_alternative.append(number)
+    print()
+
+
 
 try:
     with open('memo-sentence.p', 'rb') as f:
@@ -54,13 +63,16 @@ try:
         memo[i]['result'] = a
     pickle.dump ( a, open("save3.p", "wb"))
     pickle.dump(memo, open('memo-sentence.p', "wb"))
+    pickle.dump(p_alternative, open("correct_alt.p", "wb"))
 except Exception:
     print(Exception)
     pickle.dump(a, open("save3.p", "wb"))
     pickle.dump(memo, open('memo-sentence.p', "wb"))
+    pickle.dump(p_alternative, open("correct_alt.p", "wb"))
 except KeyboardInterrupt:
     pickle.dump(a, open("save3.p", "wb"))
     pickle.dump(memo, open('memo-sentence.p', "wb"))
+    pickle.dump(p_alternative, open("correct_alt.p", "wb"))
 # for i in sentences:
 #     print(i, end='\n\n')
 

@@ -55,3 +55,14 @@ for row in xl.iterrows():
 
 
 pickle.dump ( query_2, open( "save2.p", "wb"))
+
+
+p_alternative = []
+for row in xl.iterrows():
+    number = row[1][2]
+    p_alternative.append(number)
+    print()
+
+
+
+pickle.dump ( p_alternative, open( "correct_alt.p", "wb"))
