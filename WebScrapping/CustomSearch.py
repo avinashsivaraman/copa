@@ -6,7 +6,7 @@ __author__ = 'jcgregorio@google.com (Joe Gregorio)'
 
 import pprint
 
-from apiclient.discovery import
+from apiclient.discovery import build
 
 
 def main(apiKey, q):
@@ -19,10 +19,10 @@ def main(apiKey, q):
 
   res = service.cse().list(
       q=q,
-      cx='015267152292348546700:nqys-ptbbks',
+      cx='015267152292348546700:l1jzt9ewozi',
 
     ).execute()
   pprint.pprint(res)
 
 if __name__ == '__main__':
-  main('AIzaSyDGAIAw_0-J650hhlGGRtxaslX-9g5tQME', 'avinash+sivaraman')
+  main('AIzaSyAOcDshR94ts5dab94LT3BlrKlE82nYIlI', 'avinash+sivaraman')
