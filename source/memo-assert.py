@@ -2,7 +2,12 @@ import pickle
 
 
 
-with open('memo-sentence.p', 'rb') as f:
+with open('memo-sentence-full.p', 'rb') as f:
     correct = pickle.load(f)
 
-print(correct.keys())
+
+
+print(type(correct))
+for k, v in correct.items():
+    print(v["result"])
+

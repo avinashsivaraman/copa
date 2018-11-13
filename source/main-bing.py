@@ -12,19 +12,17 @@ with open('save2.p', 'rb') as f:
 
 
 try:
-    with open('memo-sentence-bing-334.p', 'rb') as f:
+    with open('memo-sentence-full.p', 'rb') as f:
         memo = pickle.load(f)
 except FileNotFoundError:
     memo = {}
 
-result = []
-
 try:
-    for i in range(334, 400):
+    for i in range(1001):
         print('sentence number', i+1)
+        temp = []
         alternative1 = data_1[i]
         alternative2 = data_2[i]
-        # print(alternative1, alternative2)
 
         if i not in memo:
             sentences1, sentences2 = searchBing(alternative1, alternative2)
@@ -38,7 +36,8 @@ try:
             sentences1 = memo[i]['sentences1']
             sentences2 = memo[i]['sentences2']
 
-        if(len(sentences1) > len(sentences2)):
+
+        if len(sentences1) > len(sentences2):
             a = 1
             print('Plausible alternative is 1')
         elif len(sentences1) < len(sentences2):
@@ -47,17 +46,20 @@ try:
         else:
             a = 3
             print('Equal')
-        result.append(a)
-        memo[i]['result'] = a
-    pickle.dump ( a, open("save3.p", "wb"))
-    pickle.dump(memo, open('memo-sentence-bing-334.p', "wb"))
+        if a == 1:
+            temp = [1, -1]
+        elif a == 2:
+            temp = [-1, 1]
+        else:
+            temp = [0, 0]
+
+        memo[i]['result'] = temp
+    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
 except Exception as e:
     print(str(e))
-    pickle.dump(a, open("save3.p", "wb"))
-    pickle.dump(memo, open('memo-sentence-bing-334.p', "wb"))
+    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
 except KeyboardInterrupt:
-    pickle.dump(a, open("save3.p", "wb"))
-    pickle.dump(memo, open('memo-sentence-bing-334.p', "wb"))
+    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
 # for i in sentences:
 #     print(i, end='\n\n')
 
