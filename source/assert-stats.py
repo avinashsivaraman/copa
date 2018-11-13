@@ -1,10 +1,9 @@
 import pickle
 
-
-
 with open('correct_alt.p', 'rb') as f:
     correct = pickle.load(f)
 # print(len(correct))
+print("Google and Bing")
 total = 0
 intersection = 0
 temp = []
@@ -32,3 +31,50 @@ print(intersection)
 # print(total)
 print()
 print("Accuracy", intersection / total)
+
+bing_results = {}
+with open('memo-sentence-bing-0.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-60.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-107.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-200.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-255.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-300.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+with open('memo-sentence-bing-334-1000.p', 'rb') as f:
+    bing_results.update(pickle.load(f))
+
+pickle.dump(bing_results, open("memo-sentence-full-bing.p", "wb"))
+
+print("\nBing")
+total1 = 0
+intersection1 = 0
+temp1 = []
+file1 = 'memo-sentence-full-bing.p'
+with open(file1, 'rb') as f:
+    memoCurrent = pickle.load(f)
+    for i in memoCurrent:
+        total1 += 1
+        if memoCurrent[i]["result"] == correct[i]:
+            intersection1 += 1
+        temp1.append(memoCurrent[i]["result"])
+
+
+print("Correct stats")
+print(len(list(filter(lambda x: x == 1, correct))))
+print(len(list(filter(lambda x: x == 2, correct))))
+print()
+print("Actual stats")
+print(len(list(filter(lambda x: x == 1, temp1))))
+print(len(list(filter(lambda x: x == 2, temp1))))
+print(len(list(filter(lambda x: x == 3, temp1))))
+print()
+print("No of correct result")
+print(intersection1)
+# print(total)
+print()
+print("Accuracy", intersection1 / total1)
