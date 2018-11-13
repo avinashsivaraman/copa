@@ -1,6 +1,4 @@
 from WebScrapping.CustomSearch import searchBing
-import csv
-import pandas as pd
 import pickle
 import time
 
@@ -12,7 +10,7 @@ with open('save2.p', 'rb') as f:
 
 
 try:
-    with open('memo-sentence-full.p', 'rb') as f:
+    with open('memo-sentence-full-bing.p', 'rb') as f:
         memo = pickle.load(f)
 except FileNotFoundError:
     memo = {}
@@ -29,7 +27,7 @@ try:
             time.sleep(10)
             memo[i] = {
                 'sentences1': sentences1,
-                'sentences2': sentences2
+                'sentences2': sentences2,
             }
 
         else:
@@ -39,27 +37,26 @@ try:
 
         if len(sentences1) > len(sentences2):
             a = 1
+            temp = [1, -1]
             print('Plausible alternative is 1')
         elif len(sentences1) < len(sentences2):
             a = 2
+            temp = [-1, 1]
             print('Plausible alternative is 2')
         else:
             a = 3
-            print('Equal')
-        if a == 1:
-            temp = [1, -1]
-        elif a == 2:
-            temp = [-1, 1]
-        else:
             temp = [0, 0]
+            print('Equal')
 
         memo[i]['result'] = temp
-    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
+        memo[i]['queryparameter1'] = alternative1
+        memo[i]['queryparameter2'] = alternative2
+    pickle.dump(memo, open('memo-sentence-full-bing.p', "wb"))
 except Exception as e:
     print(str(e))
-    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
+    pickle.dump(memo, open('memo-sentence-full-bing.p', "wb"))
 except KeyboardInterrupt:
-    pickle.dump(memo, open('memo-sentence-full.p', "wb"))
+    pickle.dump(memo, open('memo-sentence-full-bing.p', "wb"))
 # for i in sentences:
 #     print(i, end='\n\n')
 
