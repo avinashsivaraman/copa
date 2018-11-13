@@ -2,10 +2,10 @@ from WebScrapping.CustomSearch import searchBing
 import pickle
 import time
 
-with open('save1.p', 'rb') as f:
+with open('save1-demo.p', 'rb') as f:
     data_1 = pickle.load(f)
 
-with open('save2.p', 'rb') as f:
+with open('save2-demo.p', 'rb') as f:
     data_2 = pickle.load(f)
 
 
