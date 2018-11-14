@@ -8,7 +8,10 @@ with open('save1-demo.p', 'rb') as f:
 with open('save2-demo.p', 'rb') as f:
     data_2 = pickle.load(f)
 
+with open('data/queryWordsWithTag.p', 'rb') as f:
+    queryWords = pickle.load(f)
 
+print(queryWords)
 try:
     with open('memo-sentence-full-bing.p', 'rb') as f:
         memo = pickle.load(f)
@@ -49,8 +52,8 @@ try:
             print('Equal')
 
         memo[i]['result'] = temp
-        memo[i]['queryparameter1'] = alternative1
-        memo[i]['queryparameter2'] = alternative2
+        memo[i]['queryparameter1'] = queryWords[i]["sentence1"]
+        memo[i]['queryparameter2'] = queryWords[i]["sentence2"]
     pickle.dump(memo, open('memo-sentence-full-bing.p', "wb"))
 except Exception as e:
     print(str(e))
