@@ -1,6 +1,5 @@
 import pickle
-import numpy as np
-from source.POSTaggingFilter import runFilterSentence
+from POSTaggingFilter import runFilterSentence
 from nltk.stem import WordNetLemmatizer
 import nltk
 from threading import Thread
@@ -85,9 +84,9 @@ def filterSentenceWithKey(name,end, start = 0):
             for each in sentence2:
                 temp = extractValidSentence(each, queryParameter2)
                 filteredSentence2.append(temp)
+	return filteredSentence1, filteredSentence2
     except KeyboardInterrupt:
         pickle.dump(memoLem, open('data/memoLemmatize.p', 'a'))
-        return filteredSentence1, filteredSentence2
 
 
 class FilterSentenceWorker(Thread):
@@ -105,11 +104,9 @@ class FilterSentenceWorker(Thread):
 
 step = 10
 i = 0
-for k in range(5):
-    for iternationCount in range(i, i+20):
-        start = iternationCount*step
-        FilterThread = FilterSentenceWorker(name="{}".format(iternationCount), startIndex=start, endIndex=start+10)
-        FilterThread.start()
-        print('Threads are running')
+for iternationCount in range(i, 10):
+    start = iternationCount*step
+    FilterThread = FilterSentenceWorker(name="{}".format(iternationCount), startIndex=start, endIndex=start+10)
+    FilterThread.start()
+    print('Threads are running')
 
-    i = iternationCount+1
