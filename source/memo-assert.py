@@ -61,11 +61,11 @@ def extractValidSentence(sentences, queryParameter):
 with open('memo-sentence-full-bing.p', 'rb') as f:
     correct = pickle.load(f)
 
-filteredSentence1 = []
-filteredSentence2 = []
 
 def filterSentenceWithKey(name,end, start = 0):
     try:
+        filteredSentence1 = []
+        filteredSentence2 = []
         for each in range(start, end):
             v = correct[each]
             sentence1 = v["sentences1"]
@@ -84,7 +84,7 @@ def filterSentenceWithKey(name,end, start = 0):
             for each in sentence2:
                 temp = extractValidSentence(each, queryParameter2)
                 filteredSentence2.append(temp)
-	return filteredSentence1, filteredSentence2
+        return filteredSentence1, filteredSentence2
     except KeyboardInterrupt:
         pickle.dump(memoLem, open('data/memoLemmatize.p', 'a'))
 
