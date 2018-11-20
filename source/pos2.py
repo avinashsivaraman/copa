@@ -12,8 +12,8 @@ import pandas as pd
 import csv
 import pickle
 
-path_to_jar = 'E:/ASU/1stsem/NLP/Project/copa/source/stanford-postagger-2018-10-16/stanford-postagger.jar'
-english_model = 'E:/ASU/1stsem/NLP/Project/copa/source/stanford-postagger-2018-10-16/models/english-left3words-distsim.tagger'
+path_to_jar = 'stanford-postagger-2018-10-16/stanford-postagger.jar'
+english_model = 'stanford-postagger-2018-10-16/models/english-left3words-distsim.tagger'
 java_path = "C:/Program Files/Java/jdk-9.0.1/bin/java.exe"
 os.environ['JAVAHOME'] = java_path
 
@@ -21,6 +21,7 @@ tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
 xl = pd.read_excel('sentence.xlsx', header=None)
 
 removePOSTag = ['DT', 'IN', 'PRP$', 'CD', 'EX', 'LS', 'PRP']
+
 
 print('Running')
 query_1 = []
