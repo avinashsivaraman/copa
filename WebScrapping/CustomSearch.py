@@ -4,7 +4,7 @@ import requests
 
 
 def BingSearch(searchTerm1, searchTerm2):
-    subscriptionKey = "xxxxxxxxxxAPI KEY xxxxxxxx"
+    subscriptionKey = "bbb198808ed54252b2f6922ac04bc359"
 
     customConfigId = "bcdd3b33-18f9-4487-b313-c526b76484a1"
     i = 0
