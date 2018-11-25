@@ -1,18 +1,20 @@
 from nltk.tag import StanfordPOSTagger
 import pandas as pd
 import pickle
+import re
 
 path_to_jar = 'stanford-postagger-2018-10-16/stanford-postagger.jar'
 english_model = 'stanford-postagger-2018-10-16/models/english-left3words-distsim.tagger'
 
 removePOSTag = ["CC", "CD", "DT", "EX", "FW", "LS", "MD", "NN", "NNS", "NNP", "NNPS", "PDT", "POS", "PRP", "PRP$", "RP", "SYM", "UH", "WDT", "WP", "WP$", "WRB"]
+tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
 
 
 # java_path = "C:/Program Files/Java/jdk-9.0.1/bin/java.exe"
 # os.environ['JAVAHOME'] = java_path
 
 def runFilterSentence(sentence):
-    tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
+    sentence = re.sub(r'(?<!\d)\.(?!\d)', ' .', sentence)
     tagged_sent = tagger.tag(sentence.split())
     df = pd.DataFrame(tagged_sent, columns=['token', 'pt'])
     for i in removePOSTag:
@@ -21,15 +23,16 @@ def runFilterSentence(sentence):
 
 
 if __name__ == "__main__":
-    tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
-    xl = pd.read_excel('sentences_without_dot.xlsx', header=None)
+    xl = pd.read_excel('sentence.xlsx', header=None)
 
     print('Running')
     query_1 = []
     try:
         for row in xl.iterrows():
-            text = row[1][0]
-            text1 = row[1][13]
+            text = re.sub(r'(?<!\d)\.(?!\d)', ' ', row[1][0])
+            text1 = re.sub(r'(?<!\d)\.(?!\d)', ' ', row[1][1])
+            print(text)
+            print(text1)
             tagged_sent = tagger.tag(text.split())
             tagged_sent1 = tagger.tag(text1.split())
             df = pd.DataFrame(tagged_sent, columns=['token', 'pt'])

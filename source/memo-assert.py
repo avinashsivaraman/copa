@@ -60,18 +60,41 @@ def isValidSentence(actual, current):
         return True
     return False
 
+# def isValidSentence(actual, current):
+#     parseLength = 0
+#     for every in current:
+#         e1, eTag = every
+#         if (parseLength < len(actual)):
+#             a1, aTag = actual[parseLength][0], actual[parseLength][1]
+#             e1 = lemmatize(e1, eTag)
+#             a1 = lemmatize(a1, aTag)
+#             if (e1 == a1):
+#                 parseLength += 1
+#         else:
+#             break
+#     if (parseLength == len(actual)):
+#         return True
+#     return False
 
-def extractValidSentence(sentences, queryParameter):
-    sentences = re.sub(r'[^\w\s]',' ',sentences)
-    sentenceList1 = sentences.split('.')
+
+# def extractValidSentence(sentences, queryParameter):
+#     sentenceList1 = sentences.split('.')
+#     result = []
+#     for i in range(len(sentenceList1)):
+#         sentence = sentenceList1[i]
+#         if sentence != '':
+#             if isValidSentence(queryParameter, runFilterSentence(sentence)):
+#                 result.append(sentence)
+#     return result
+
+def extractValidSentence(sentence, queryParameter):
     result = []
-    for sentence in sentenceList1:
-        if sentence != '':
-            if isValidSentence(queryParameter, runFilterSentence(sentence)):
-                result.append(sentence)
+    if sentence != '' and isValidSentence(queryParameter, runFilterSentence(sentence)):
+        print('Valid one')
+        result.append(sentence)
     return result
 
-def filterTheSentence(sentNo, alternativeNo,sentences, queryparameter):
+def filterTheSentence(sentNo, alternativeNo, sentences, queryparameter):
     filteredSentence = []
     print('Sentence number', sentNo)
     print('Processing the alternative ', alternativeNo)
@@ -81,6 +104,7 @@ def filterTheSentence(sentNo, alternativeNo,sentences, queryparameter):
         temp = extractValidSentence(each, queryparameter)
         if(len(temp) != 0):
             print('Valid sentence')
+            print(temp)
             filteredSentence.append(temp)
         i+=1
     return filteredSentence
@@ -129,10 +153,10 @@ if __name__ == '__main__':
     #     FilterThread.start()
     #     print('Threads are running')
 
-    startIndex = 100
+    startIndex = 101
     endIndex = 102
-
+    a = '3'
     f = filterSentenceWithKey(name='main-thread',start=startIndex, end=endIndex)
-    filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)
+    filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)+'_attempt_'+a+'.p'
     pickle.dump(f, open(filename, 'wb'))
 
