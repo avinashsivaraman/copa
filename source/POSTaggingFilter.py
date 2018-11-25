@@ -22,14 +22,14 @@ def runFilterSentence(sentence):
 
 if __name__ == "__main__":
     tagger = StanfordPOSTagger(english_model, path_to_jar, encoding='utf-8')
-    xl = pd.read_excel('sentence.xlsx', header=None)
+    xl = pd.read_excel('sentences_without_dot.xlsx', header=None)
 
     print('Running')
     query_1 = []
     try:
         for row in xl.iterrows():
             text = row[1][0]
-            text1 = row[1][1]
+            text1 = row[1][13]
             tagged_sent = tagger.tag(text.split())
             tagged_sent1 = tagger.tag(text1.split())
             df = pd.DataFrame(tagged_sent, columns=['token', 'pt'])
@@ -38,6 +38,8 @@ if __name__ == "__main__":
                 df = df[df.pt != i]
                 df1 = df1[df1.pt != i]
             d = {
+                'sentence_query_word_1': list(df['token']),
+                'sentence_query_word_2': list(df1['token']),
                 'sentence1': df.values,
                 'sentence2': df1.values
             }
@@ -47,6 +49,7 @@ if __name__ == "__main__":
         pickle.dump(query_1, open("data/queryWordsWithTag.p", "wb"))
         print("Dumped successfully")
     except Exception as e:
+        print(e)
         pickle.dump(query_1, open("data/queryWordsWithTag.p", "wb"))
     except KeyboardInterrupt:
         pickle.dump(query_1, open("data/queryWordsWithTag.p", "wb"))

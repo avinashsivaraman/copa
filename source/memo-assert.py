@@ -1,17 +1,37 @@
 import pickle
-from POSTaggingFilter import runFilterSentence
+from source.POSTaggingFilter import runFilterSentence
 from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet as wn
 import nltk
 from threading import Thread
+import re
 
 nltk.download('wordnet')
 lemm = WordNetLemmatizer()
+
+#Loading the data and it is accessed by all the functions
+with open('data/cache-bing-sentence.p', 'rb') as f:
+    correct = pickle.load(f)
 
 
 try:
     memoLem = pickle.load(open('data/memoLemmatize.p', 'rb'))
 except FileNotFoundError:
     memoLem = {}
+
+# includedPOS = ["IN", "JJ", "JJR", "JJS", "RB", "RBR", "RBS", "TO", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]
+
+def getPOSTag(tag):
+    if tag in ["VB", "VBD", "VBG", "VBN", "VBP", "VBZ"]:
+        return wn.VERB
+    elif tag in ["JJ", "JJR", "JJS"]:
+        return wn.ADJ
+    elif tag in ["RB", "RBR", "RBS"]:
+        return wn.ADV
+    elif tag is 'IN':
+        return wn.IN
+    else:
+        return wn.ADV
 
 def splitquery(query):
     ind = 0
@@ -21,24 +41,17 @@ def splitquery(query):
         ind = ind + 1
 
 
-def lemmatize(word):
-    if word in memoLem:
-        return memoLem[word]
-    else:
-        lem = lemm.lemmatize(word)
-        memoLem[word] = lem
-        return lem
-
+def lemmatize(word, wtag):
+    return lemm.lemmatize(word, pos=getPOSTag(wtag))
 
 def isValidSentence(actual, current):
     parseLength = 0
-    # for
     for every in current:
         e1, eTag = every
         if (parseLength < len(actual)):
             a1, aTag = actual[parseLength][0], actual[parseLength][1]
-            e1 = lemmatize(e1)
-            a1 = lemmatize(a1)
+            e1 = lemmatize(e1, eTag)
+            a1 = lemmatize(a1, aTag)
             if (e1 == a1):
                 parseLength += 1
         else:
@@ -49,6 +62,7 @@ def isValidSentence(actual, current):
 
 
 def extractValidSentence(sentences, queryParameter):
+    sentences = re.sub(r'[^\w\s]',' ',sentences)
     sentenceList1 = sentences.split('.')
     result = []
     for sentence in sentenceList1:
@@ -57,16 +71,25 @@ def extractValidSentence(sentences, queryParameter):
                 result.append(sentence)
     return result
 
-
-with open('memo-sentence-full-bing.p', 'rb') as f:
-    correct = pickle.load(f)
-
+def filterTheSentence(sentNo, alternativeNo,sentences, queryparameter):
+    filteredSentence = []
+    print('Sentence number', sentNo)
+    print('Processing the alternative ', alternativeNo)
+    i = 1
+    for each in sentences:
+        print('Processing the {}th sentence'.format(i))
+        temp = extractValidSentence(each, queryparameter)
+        if(len(temp) != 0):
+            print('Valid sentence')
+            filteredSentence.append(temp)
+        i+=1
+    return filteredSentence
 
 def filterSentenceWithKey(name,end, start = 0):
     try:
-        filteredSentence1 = []
-        filteredSentence2 = []
+        d = {}
         for each in range(start, end):
+            print('Processing the sentence ', each+1)
             v = correct[each]
             sentence1 = v["sentences1"]
             sentence2 = v["sentences2"]
@@ -74,17 +97,11 @@ def filterSentenceWithKey(name,end, start = 0):
             queryParameter2 = v["queryparameter2"]
             i = 1
             print(name + 'Running the alternative', i)
-            for each in sentence1:
-                print(name + 'Running the sentence ', i)
-                temp = extractValidSentence(each, queryParameter1)
-                if (len(temp)):
-                    print('Got a valid one', each, queryParameter1)
-                i += 1
-                filteredSentence1.append(temp)
-            for each in sentence2:
-                temp = extractValidSentence(each, queryParameter2)
-                filteredSentence2.append(temp)
-        return filteredSentence1, filteredSentence2
+            d[each] = {
+                'sentence1': filterTheSentence(each,1,sentence1, queryParameter1),
+                'sentence2': filterTheSentence(each,2,sentence2, queryParameter2)
+            }        
+        return d
     except KeyboardInterrupt:
         pickle.dump(memoLem, open('data/memoLemmatize.p', 'a'))
 
@@ -102,11 +119,20 @@ class FilterSentenceWorker(Thread):
         pickle.dump([f1, f2], open(filename, 'wb'))
 
 
-step = 10
-i = 0
-for iternationCount in range(i, 10):
-    start = iternationCount*step
-    FilterThread = FilterSentenceWorker(name="{}".format(iternationCount), startIndex=start, endIndex=start+10)
-    FilterThread.start()
-    print('Threads are running')
+if __name__ == '__main__':
+    #Code for the running the thread
+    # step = 10
+    # i = 0
+    # for iternationCount in range(i, 10):
+    #     start = iternationCount*step
+    #     FilterThread = FilterSentenceWorker(name="{}".format(iternationCount), startIndex=start, endIndex=start+10)
+    #     FilterThread.start()
+    #     print('Threads are running')
+
+    startIndex = 100
+    endIndex = 102
+
+    f = filterSentenceWithKey(name='main-thread',start=startIndex, end=endIndex)
+    filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)
+    pickle.dump(f, open(filename, 'wb'))
 
