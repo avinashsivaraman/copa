@@ -81,9 +81,12 @@
 
 
 import pickle
-d = pickle.load(open('data/filterSentence_101_102_attempt_3.p', 'rb'))
+d = pickle.load(open('data/filterSentence_0_10_attempt_1.p', 'rb'))
 correct = pickle.load(open('correct_alt.p', 'rb'))
 
-print(correct[100])
+# print(correct[100])
 for k, v in d.items():
-    print(k, v)
+    s1 = len(v['sentence1'])
+    s2 = len(v['sentence2'])
+
+    print(s1, s2, correct[k])

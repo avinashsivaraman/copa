@@ -13,6 +13,12 @@ lemm = WordNetLemmatizer()
 with open('data/cache-bing-sentence.p', 'rb') as f:
     correct = pickle.load(f)
 
+startIndex = 0
+endIndex = 10
+a = '1'
+filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)+'_attempt_'+a+'.p'
+fOld = pickle.load(open(filename, 'rb'))
+
 
 try:
     memoLem = pickle.load(open('data/memoLemmatize.p', 'rb'))
@@ -100,7 +106,7 @@ def filterTheSentence(sentNo, alternativeNo, sentences, queryparameter):
     print('Processing the alternative ', alternativeNo)
     i = 1
     for each in sentences:
-        print('Processing the {}th sentence'.format(i))
+        # print('Processing the {}th sentence'.format(i))
         temp = extractValidSentence(each, queryparameter)
         if(len(temp) != 0):
             print('Valid sentence')
@@ -114,6 +120,8 @@ def filterSentenceWithKey(name,end, start = 0):
         d = {}
         for each in range(start, end):
             print('Processing the sentence ', each+1)
+            if(each in fOld):
+                continue
             v = correct[each]
             sentence1 = v["sentences1"]
             sentence2 = v["sentences2"]
@@ -128,6 +136,7 @@ def filterSentenceWithKey(name,end, start = 0):
         return d
     except KeyboardInterrupt:
         pickle.dump(memoLem, open('data/memoLemmatize.p', 'a'))
+        pickle.dump(d, open(filename, 'wb'))
 
 
 class FilterSentenceWorker(Thread):
@@ -153,10 +162,6 @@ if __name__ == '__main__':
     #     FilterThread.start()
     #     print('Threads are running')
 
-    startIndex = 101
-    endIndex = 102
-    a = '3'
     f = filterSentenceWithKey(name='main-thread',start=startIndex, end=endIndex)
-    filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)+'_attempt_'+a+'.p'
     pickle.dump(f, open(filename, 'wb'))
 
