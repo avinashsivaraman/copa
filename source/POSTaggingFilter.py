@@ -29,8 +29,8 @@ if __name__ == "__main__":
     query_1 = []
     try:
         for row in xl.iterrows():
-            text = re.sub(r'(?<!\d)\.(?!\d)', ' ', row[1][0])
-            text1 = re.sub(r'(?<!\d)\.(?!\d)', ' ', row[1][1])
+            text = re.sub(r'(?<!\d)\.(?!\d)', ' .', row[1][0])
+            text1 = re.sub(r'(?<!\d)\.(?!\d)', ' .', row[1][1])
             print(text)
             print(text1)
             tagged_sent = tagger.tag(text.split())

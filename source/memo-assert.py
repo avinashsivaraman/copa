@@ -13,11 +13,14 @@ lemm = WordNetLemmatizer()
 with open('data/cache-bing-sentence.p', 'rb') as f:
     correct = pickle.load(f)
 
-startIndex = 0
-endIndex = 10
+startIndex = 10
+endIndex = 20
 a = '1'
 filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)+'_attempt_'+a+'.p'
-fOld = pickle.load(open(filename, 'rb'))
+try:
+    fOld = pickle.load(open(filename, 'rb'))
+except Exception:
+    fOld = {}
 
 
 try:

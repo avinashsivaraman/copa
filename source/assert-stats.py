@@ -81,7 +81,7 @@
 
 
 import pickle
-d = pickle.load(open('data/filterSentence_0_10_attempt_1.p', 'rb'))
+d = pickle.load(open('data/filterSentence_10_20_attempt_1.p', 'rb'))
 correct = pickle.load(open('correct_alt.p', 'rb'))
 
 # print(correct[100])
