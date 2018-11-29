@@ -13,8 +13,8 @@ lemm = WordNetLemmatizer()
 with open('data/cache-bing-sentence.p', 'rb') as f:
     correct = pickle.load(f)
 
-startIndex = 10
-endIndex = 20
+startIndex = 20
+endIndex = 30
 a = '1'
 filename = 'data/filterSentence_'+str(startIndex)+'_'+str(endIndex)+'_attempt_'+a+'.p'
 try:
@@ -68,33 +68,6 @@ def isValidSentence(actual, current):
     if (parseLength == len(actual)):
         return True
     return False
-
-# def isValidSentence(actual, current):
-#     parseLength = 0
-#     for every in current:
-#         e1, eTag = every
-#         if (parseLength < len(actual)):
-#             a1, aTag = actual[parseLength][0], actual[parseLength][1]
-#             e1 = lemmatize(e1, eTag)
-#             a1 = lemmatize(a1, aTag)
-#             if (e1 == a1):
-#                 parseLength += 1
-#         else:
-#             break
-#     if (parseLength == len(actual)):
-#         return True
-#     return False
-
-
-# def extractValidSentence(sentences, queryParameter):
-#     sentenceList1 = sentences.split('.')
-#     result = []
-#     for i in range(len(sentenceList1)):
-#         sentence = sentenceList1[i]
-#         if sentence != '':
-#             if isValidSentence(queryParameter, runFilterSentence(sentence)):
-#                 result.append(sentence)
-#     return result
 
 def extractValidSentence(sentence, queryParameter):
     result = []
